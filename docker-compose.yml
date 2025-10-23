@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=https://uninventive-hollowly-sharita.ngrok-free.dev
+      - N8N_EDITOR_BASE_URL=https://uninventive-hollowly-sharita.ngrok-free.dev
+      - GENERIC_TIMEZONE=America/Denver 
+      - TZ=America/Denver
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_RUNNERS_ENABLED=true
+    volumes:
+      - n8n_data:/home/node/.n8n
+      # Mount local folder for custom nodes (optional)
+      # - ./custom-nodes:/home/node/.n8n/custom
+    # extra_hosts:
+    #   # This allows n8n to reach your host machine where LM Studio/Ollama runs
+    #   - "host.docker.internal:host-gateway"
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    ports:
+      - "4040:4040"  # ngrok web interface
+    depends_on:
+      - n8n
+
+volumes:
+  n8n_data:
+    driver: local
