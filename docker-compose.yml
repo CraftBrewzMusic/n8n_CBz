@@ -12,18 +12,23 @@ services:
       - N8N_PORT=5678
       - N8N_PROTOCOL=http
       - WEBHOOK_URL=https://uninventive-hollowly-sharita.ngrok-free.dev
+      - WEBHOOK_TUNNEL_URL=https://uninventive-hollowly-sharita.ngrok-free.dev
       - N8N_EDITOR_BASE_URL=https://uninventive-hollowly-sharita.ngrok-free.dev
       - GENERIC_TIMEZONE=America/Denver 
       - TZ=America/Denver
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       - N8N_RUNNERS_ENABLED=true
+      # Misc
+      - N8N_COMMUNITY_PACKAGE_ALLOW_TOOL_USAGE=true
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+      - N8N_DEFAULT_CORS=true
     volumes:
       - n8n_data:/home/node/.n8n
       # Mount local folder for custom nodes (optional)
       # - ./custom-nodes:/home/node/.n8n/custom
-    # extra_hosts:
-    #   # This allows n8n to reach your host machine where LM Studio/Ollama runs
-    #   - "host.docker.internal:host-gateway"
+    extra_hosts:
+      # This allows n8n to reach your host machine where LM Studio/Ollama runs
+      - "host.docker.internal:host-gateway"
 
   ngrok:
     image: ngrok/ngrok:latest
