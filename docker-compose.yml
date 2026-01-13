@@ -3,7 +3,7 @@ version: '3.8'
 services:
   n8n-cbz:
     build: .
-    image: n8n-cbz-custom:1.120.0
+    image: n8n-cbz-custom:1.120.4
     container_name: n8n-cbz
     restart: unless-stopped
     ports:
